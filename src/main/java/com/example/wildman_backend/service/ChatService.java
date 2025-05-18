@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +29,15 @@ public class ChatService {
     }
 
     public MessageDto sendMessage(String chatId, MessageDto messageDto) {
-        chatMemory.add(chatId, messageDto);
 
+        Pattern pattern = Pattern.compile("[А-Яа-яЁё]+");
+        Matcher matcher = pattern.matcher(messageDto.getText());
+
+        if(matcher.find()) {
+            return MessageDto.builder().text("Сообщение не должно содержать кириллицу").build();
+        }
+
+        chatMemory.add(chatId, messageDto);
         String warningMessage = "Сейчас я буду писать на ангилйском. Если будут какие-то ошибки нарушающие правила ангилйского языка ответь PUTIN а через две строки описание ошибок краткое И пиши на русском!. Если нет - не пиши ничего";
 
 
