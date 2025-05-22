@@ -5,6 +5,7 @@ import com.example.wildman_backend.domain.dto.ChatDto;
 import com.example.wildman_backend.domain.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
@@ -34,11 +35,11 @@ public class ChatService {
         Matcher matcher = pattern.matcher(messageDto.getText());
 
         if(matcher.find()) {
-            return MessageDto.builder().text("Сообщение не должно содержать кириллицу").build();
+            return MessageDto.builder().mistakes("Сообщение не должно содержать кириллицу").build();
         }
 
         chatMemory.add(chatId, messageDto);
-        String warningMessage = "Сейчас я буду писать на ангилйском. Если будут какие-то ошибки нарушающие правила ангилйского языка ответь PUTIN а через две строки описание ошибок краткое И пиши на русском!. Если нет - не пиши ничего";
+        String warningMessage = "Сейчас я отправлю тебе текст на английском языке. Ты должен проверить его на вс возможные правила английского языка. Если в тексте окажутся ошибки, ответь мне словом MISTAKE, а еще через перевод строки добавить краткое описание ошибок на русском языке. Если ошибок нет, отправь пустоту";
 
 
         MessageDto modifiedMessage = MessageDto.builder()
@@ -51,8 +52,8 @@ public class ChatService {
 
         String mistakesResponse = chatClient.call(mistakesPrompt).getResult().getOutput().getText();
         String mistakes = "";
-        if(mistakesResponse!= null && mistakesResponse.contains("PUTIN")) {
-            mistakes = mistakesResponse.replaceAll("PUTIN", "");
+        if(mistakesResponse!= null && mistakesResponse.contains("MISTAKE")) {
+            mistakes = mistakesResponse.replaceAll("MISTAKE", "");
         }
 
         String response = chatClient.call(chatPrompt).getResult().getOutput().getText();
@@ -62,6 +63,9 @@ public class ChatService {
                 .mistakes(mistakes)
                 .build();
         chatMemory.add(chatId, chatResponse);
+
+        List<Message> history = chatMemory.get(chatId);
+        chatResponse.setHistory(history);
         return chatResponse;
     }
 
