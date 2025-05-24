@@ -29,4 +29,12 @@ public class DtoMapper {
         }
         return dtos;
     }
+
+    public <D, M> List<M> toModel(List<D> dtos, Class<M> destinationClass) {
+        List<M> models = new ArrayList<>();
+        for (D dto : dtos) {
+            models.add(toModel(dto, destinationClass));
+        }
+        return models;
+    }
 }
