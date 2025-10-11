@@ -1,0 +1,16 @@
+services:
+  db:
+    container_name: postgre_wildman_db
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=wildman_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgre123
+    ports:
+      - "4000:5432"
+
+  redis:
+    container_name: redis_wildman
+    image: redis:7
+    ports:
+      - "6379:6379"
