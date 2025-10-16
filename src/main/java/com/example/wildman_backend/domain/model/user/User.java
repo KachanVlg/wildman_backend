@@ -1,6 +1,4 @@
 package com.example.wildman_backend.domain.model.user;
-
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
