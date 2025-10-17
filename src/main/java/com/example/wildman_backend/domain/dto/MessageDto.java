@@ -16,6 +16,7 @@ import java.util.Map;
 public class MessageDto implements Message {
     private String text;
     private MessageType type = MessageType.USER;
+    private String mistakes;
 
     @Override
     public MessageType getMessageType() {
@@ -31,4 +32,6 @@ public class MessageDto implements Message {
     public Map<String, Object> getMetadata() {
         return Map.of();
     }
+
+    public String getMistakes() {return mistakes;}
 }
