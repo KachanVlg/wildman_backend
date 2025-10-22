@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.MessageType;
 
+import java.util.List;
 import java.util.Map;
 
 @Builder
@@ -17,6 +18,7 @@ public class MessageDto implements Message {
     private String text;
     private MessageType type = MessageType.USER;
     private String mistakes;
+    private List<Message> history;
 
     @Override
     public MessageType getMessageType() {
@@ -34,4 +36,12 @@ public class MessageDto implements Message {
     }
 
     public String getMistakes() {return mistakes;}
+
+    public List<Message> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<Message> history) {
+        this.history = history;
+    }
 }
