@@ -47,8 +47,8 @@ public class CardController {
     }
 
     @GetMapping
-    public List<CardDto> getCardsByDeck(@PathVariable Long deckId) {
-        List<Card> cards = cardService.getCardByDeck(deckId);
+    public List<CardDto> getCardsByDeck(@PathVariable Long deckId, Authentication authentication) {
+        List<Card> cards = cardService.getCardByDeck(deckId, authentication);
         return dtoMapper.toDto(cards, CardDto.class);
     }
 

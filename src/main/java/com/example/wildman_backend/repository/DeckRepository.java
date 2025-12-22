@@ -12,4 +12,6 @@ import java.util.List;
 public interface DeckRepository extends JpaRepository<Deck, Long> {
 
     List<Deck> findAllByUserId(Long user_id);
+    boolean existsByIdAndUserUsername(Long deckId, String username);
+    boolean existsByIdAndUserId(Long deckId, Long userId);
 }
