@@ -15,10 +15,10 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        userRepository.deleteAll();
-        userRepository.save(User.builder()
-                .role(Role.USER)
-                .username("user")
-                .password(encoder.encode("user")).build());
+        // userRepository.deleteAll();
+        // userRepository.save(User.builder()
+        //         .role(Role.USER)
+        //         .username("user")
+        //         .password(encoder.encode("user")).build());
     }
 }

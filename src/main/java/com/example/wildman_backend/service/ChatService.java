@@ -24,6 +24,12 @@ public class ChatService {
 
     private final OpenAiChatModel chatClient;
     private final ChatMemory chatMemory;
+    private final static String FIRST_PROMPT = "Сейчас я отправлю тебе текст на английском языке. " +
+            "Ты должен проверить его на все возможные правила английского языка. " +
+            "Если в тексте окажутся ошибки, ответь мне словом MISTAKE, а еще через перевод строки добавить краткое описание ошибок на русском языке. " +
+            "Если ошибок нет, отправь пустоту" + "\n\n";
+    private final static String RUSSIAN_CHARS_IN_MESSAGE_ERROR = "Сообщение не должно содержать кириллицу";
+    private final static String MISTAKE_IN_MESSAGE_KEY = "MISTAKE";
 
     public ChatDto startChat() {
         return new ChatDto(UUID.randomUUID().toString());
@@ -31,19 +37,14 @@ public class ChatService {
 
     public MessageDto sendMessage(String chatId, MessageDto messageDto) {
 
-        Pattern pattern = Pattern.compile("[А-Яа-яЁё]+");
-        Matcher matcher = pattern.matcher(messageDto.getText());
-
-        if(matcher.find()) {
-            return MessageDto.builder().mistakes("Сообщение не должно содержать кириллицу").build();
+        if(isRussianCharsInMessage(messageDto.getText())) {
+            return MessageDto.builder().mistakes(RUSSIAN_CHARS_IN_MESSAGE_ERROR).build();
         }
 
         chatMemory.add(chatId, messageDto);
-        String warningMessage = "Сейчас я отправлю тебе текст на английском языке. Ты должен проверить его на вс возможные правила английского языка. Если в тексте окажутся ошибки, ответь мне словом MISTAKE, а еще через перевод строки добавить краткое описание ошибок на русском языке. Если ошибок нет, отправь пустоту";
-
 
         MessageDto modifiedMessage = MessageDto.builder()
-                .text(warningMessage + "\n\n" + messageDto.getText())
+                .text(FIRST_PROMPT + messageDto.getText())
                 .type(MessageType.USER)
                 .build();
 
@@ -52,8 +53,8 @@ public class ChatService {
 
         String mistakesResponse = chatClient.call(mistakesPrompt).getResult().getOutput().getText();
         String mistakes = "";
-        if(mistakesResponse!= null && mistakesResponse.contains("MISTAKE")) {
-            mistakes = mistakesResponse.replaceAll("MISTAKE", "");
+        if(mistakesResponse!= null && mistakesResponse.contains(MISTAKE_IN_MESSAGE_KEY)) {
+            mistakes = mistakesResponse.replaceAll(MISTAKE_IN_MESSAGE_KEY, "");
         }
 
         String response = chatClient.call(chatPrompt).getResult().getOutput().getText();
@@ -71,5 +72,13 @@ public class ChatService {
 
     public void endChat(String chatId) {
         chatMemory.clear(chatId);
+    }
+
+    private static boolean isRussianCharsInMessage(String message) {
+
+        Pattern pattern = Pattern.compile("[А-Яа-яЁё]+");
+        Matcher matcher = pattern.matcher(message);
+
+        return matcher.find();
     }
 }
