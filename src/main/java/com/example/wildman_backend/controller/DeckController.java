@@ -33,17 +33,17 @@ public class DeckController {
         return dtoMapper.toDto(deckService.createDeck(authentication, deck), DeckDto.class);
     }
 
-    @GetMapping("{deckId}")
+    @GetMapping("/{deckId}")
     public DeckDto getDeck(@PathVariable Long deckId) {
         return dtoMapper.toDto(deckService.getDeck(deckId), DeckDto.class);
     }
 
-    @DeleteMapping("{deckId}")
+    @DeleteMapping("/{deckId}")
     public void deleteDeck(@PathVariable Long deckId) {
         deckService.deleteDeck(deckId);
     }
 
-    @PutMapping("{deckId}")
+    @PutMapping("/{deckId}")
     public void changeDeckName(@PathVariable Long deckId, @RequestBody String newName) {
         deckService.changeDeckName(deckId, newName);
     }
