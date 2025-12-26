@@ -1,0 +1,389 @@
+{
+  "info": {
+    "name": "wildman_backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "deckId",
+      "value": "1"
+    },
+    {
+      "key": "cardId",
+      "value": "1"
+    },
+    {
+      "key": "chatId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "user",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"test\",\n  \"password\": \"test\"\n}"
+            },
+            "description": "Public endpoint. Returns UserDto."
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"test\",\n  \"password\": \"test\"\n}"
+            },
+            "description": "Public endpoint. Uses session auth (cookie)."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ]
+            },
+            "description": "Requires authenticated session."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Decks",
+      "item": [
+        {
+          "name": "Get decks",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/decks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks"
+              ]
+            },
+            "description": "Returns array of DeckDto. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Create deck",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/decks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My deck\"\n}"
+            },
+            "description": "Returns DeckDto. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Get deck by id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}"
+              ]
+            },
+            "description": "Returns DeckDto. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Update deck name",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "\"New deck name\""
+            },
+            "description": "Body is a JSON string. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Delete deck",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}"
+              ]
+            },
+            "description": "Requires authenticated session."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cards",
+      "item": [
+        {
+          "name": "Get cards by deck",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}/cards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}",
+                "cards"
+              ]
+            },
+            "description": "Returns array of CardDto. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Create card",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}/cards",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}",
+                "cards"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"word\": \"cat\",\n  \"translation\": \"кот\"\n}"
+            },
+            "description": "Returns CardDto. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Update card",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}/cards/{{cardId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}",
+                "cards",
+                "{{cardId}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"word\": \"cat\",\n  \"translation\": \"кот\"\n}"
+            },
+            "description": "Requires authenticated session."
+          }
+        },
+        {
+          "name": "Delete card",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/decks/{{deckId}}/cards/{{cardId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "decks",
+                "{{deckId}}",
+                "cards",
+                "{{cardId}}"
+              ]
+            },
+            "description": "Requires authenticated session."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chats",
+      "item": [
+        {
+          "name": "Start chat",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/chats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chats"
+              ]
+            },
+            "description": "Returns ChatDto with id. Requires authenticated session."
+          }
+        },
+        {
+          "name": "Send message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/{{chatId}}/message",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chats",
+                "{{chatId}}",
+                "message"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Hello world\",\n  \"type\": \"USER\"\n}"
+            },
+            "description": "Returns MessageDto with text, type, mistakes, history. Requires authenticated session."
+          }
+        },
+        {
+          "name": "End chat",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/chats/{{chatId}}/end_chat",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "chats",
+                "{{chatId}}",
+                "end_chat"
+              ]
+            },
+            "description": "Requires authenticated session."
+          }
+        }
+      ]
+    }
+  ]
+}
